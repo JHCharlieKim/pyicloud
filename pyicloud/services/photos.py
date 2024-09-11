@@ -547,6 +547,11 @@ class PhotoAsset:
         )
 
     @property
+    def is_favorite(self):
+        """Gets the photo is favorite."""
+        return self._asset_record["fields"]["isFavorite"]["value"]
+
+    @property
     def versions(self):
         """Gets the photo versions."""
         if not self._versions:

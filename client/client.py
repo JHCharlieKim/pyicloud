@@ -16,7 +16,7 @@ def download_and_delete_photo(asset: PhotoAsset):
         print('This screenshot is taken recently. Skip...')
         return
 
-    if favorite_photo_id_map.get(asset.id, 0) == 1:
+    if asset.is_favorite:
         print('{} is favorite photo.'.format(asset.filename))
         return
 
@@ -45,12 +45,6 @@ username = os.environ.get('PYICLOUD_USERNAME')
 download_path = os.environ.get('DOWNLOAD_PATH', 'downloads')
 number_of_thread_pool = os.environ.get('NUMBER_OF_THREADS_POOL', 4)
 api = PyiCloudService(username)
-
-favorite_photo_id_map = dict()
-for photo in api.photos.albums['Favorites']:
-    favorite_photo_id_map[photo.id] = 1
-
-print('You have {} favorite photos'.format(len(favorite_photo_id_map.keys())))
 
 if not os.path.exists(download_path):
     os.makedirs(download_path)
