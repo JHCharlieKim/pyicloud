@@ -86,7 +86,7 @@ class PhotosService:
         "Screenshots": {
             "obj_type": "CPLAssetInSmartAlbumByAssetDate:Screenshot",
             "list_type": "CPLAssetAndMasterInSmartAlbumByAssetDate",
-            "direction": "ASCENDING",
+            "direction": "DESCENDING",
             "query_filter": [
                 {
                     "fieldName": "smartAlbum",

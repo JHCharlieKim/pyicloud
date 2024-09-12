@@ -11,15 +11,6 @@ from pyicloud.services.photos import PhotoAsset
 
 
 def download_and_delete_photo(asset: PhotoAsset):
-    last_month = date.today() - timedelta(days=30)
-    if asset.created.date() > last_month:
-        print('This screenshot is taken recently. Skip...')
-        return
-
-    if asset.is_favorite:
-        print('{} is favorite photo.'.format(asset.filename))
-        return
-
     created_date_for_filename = asset.created.strftime("%Y%m%d_%H%M%S")
     name, extension = asset.filename.split(".")
     filename = '{}_{}.{}'.format(name, created_date_for_filename, extension)
@@ -49,6 +40,22 @@ api = PyiCloudService(username)
 if not os.path.exists(download_path):
     os.makedirs(download_path)
 
+candidates = []
+last_month = date.today() - timedelta(days=30)
+screenshots_iterator = iter(api.photos.albums['Screenshots'])
+while True:
+    photo = next(screenshots_iterator, None)
+    if photo is None:
+        break
+
+    if photo.created.date() > last_month:
+       break
+
+    if photo.is_favorite:
+        continue
+
+    candidates.append(photo)
+
 pool = ThreadPool(processes=number_of_thread_pool)
-pool.map(download_and_delete_photo, iter(api.photos.albums['Screenshots']))
+pool.map(download_and_delete_photo, candidates)
 pool.close()
